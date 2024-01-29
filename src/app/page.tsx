@@ -1,95 +1,121 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import React from 'react';
+import { Grid, Box, Typography, styled, useTheme, useMediaQuery } from '@mui/material';
+import PageContainer from '@/app/components/shared/PageContainer';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import { IconAlertOctagon, IconAlarmOff, IconAlarm } from "@tabler/icons-react";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import OilBarrelOutlinedIcon from '@mui/icons-material/OilBarrelOutlined';
+import { PrivateRoute } from "./components/shared/PrivateRoute";
+import Map from './components/dashboard/Map';
+import { useAppSelector } from './redux/hooks';
+import { MetricsIndicator } from './components/dashboard/MetricsIndicator';
+import type { MetricsIndicatorProps } from './components/dashboard/MetricsIndicator';
 
-export default function Home() {
+const MapTitle = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main,
+  padding: '16px 24px',
+}));
+
+const metrics: MetricsIndicatorProps[] = [
+  {
+    icon: ArticleOutlinedIcon,
+    title: 'ETAS activos',
+    number: 3,
+    unit: '',
+  },
+  {
+    icon: IconAlarmOff,
+    title: 'ETAS en retrazo',
+    number: 0,
+    unit: '',
+  },
+  {
+    icon: IconAlarm,
+    title: 'Entregas a tiempo',
+    number: 95,
+    unit: '%',
+  },
+  {
+    icon: CalendarMonthIcon,
+    title: 'Tiempo viaje promedio',
+    number: 43.5,
+    unit: 'días',
+  },
+  {
+    icon: OilBarrelOutlinedIcon,
+    title: 'Combustible diario',
+    number: 158.51,
+    unit: 'tons',
+  },
+  {
+    icon: IconAlertOctagon,
+    title: 'Procesos reportados',
+    number: 5,
+    unit: '',
+  }
+];
+
+const Dashboard = () => {
+  const userAuth = useAppSelector(state => state.auth.user)
+  console.log('userAuth dash:', userAuth);
+
+  const theme = useTheme()
+  const mdUp = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <PrivateRoute>
+      <PageContainer title="Dashboard" description="Dashboard">
+        <Box>
+          <Grid container spacing={3} sx={{ p: '40px 20px' }}>
+            <Grid item xs={12}>
+              <Typography variant="h2">
+                Bienvenido
+              </Typography>
+            </Grid>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">
+                Administra las programaciones de los planes ETAS de tus buques.
+              </Typography>
+            </Grid>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+            <Grid item xs={12}>
+              <Typography variant="h5">
+                Métricas de hoy
+              </Typography>
+            </Grid>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+            <Grid item xs={12}>
+              <Grid container spacing={3}>
+                {metrics.length > 0 && metrics.map((item, index) => ( 
+                  <React.Fragment key={item.title}>
+                    {(index === 3 && mdUp) && 
+                      <Grid item md={3} sm={1} xs={12}>
+                      </Grid>
+                    }
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+                    <Grid item md={3} sm={5} xs={12}>
+                      <MetricsIndicator metrics={item} />
+                    </Grid>
+                  </React.Fragment>
+                ))}    
+              </Grid>
+            </Grid>
+          </Grid>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+          <Box>
+            <MapTitle>
+              <Typography variant="subtitle1" color="text.secondary">
+                Map
+              </Typography>
+            </MapTitle>
+            <Map />
+          </Box>
+        </Box>
+      </PageContainer>
+    </PrivateRoute>
+  )
 }
+
+export default Dashboard;
