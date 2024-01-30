@@ -74,12 +74,13 @@ type Props = {
     open: boolean;
     handleDrawerOpen: any;
     handleDrawerClose: any;
+    handleOpenEtaForm: any;
 }
 
-export function Sidebar({ open, handleDrawerOpen, handleDrawerClose }: Props) {
+export function Sidebar({ open, handleDrawerOpen, handleDrawerClose, handleOpenEtaForm }: Props) {
 
   const handleOpenETAModal = () => {
-    console.log('open eta modal');
+    handleOpenEtaForm()
   }
 
   return (

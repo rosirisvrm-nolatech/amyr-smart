@@ -55,7 +55,7 @@ const baselightTheme = createTheme({
       600: "#111c2d",
     },
     text: {
-      primary: "#111c2d",
+      primary: "#1c1e25",
       secondary: "#ffffff",
     },
     action: {
