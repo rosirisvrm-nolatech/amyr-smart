@@ -9,6 +9,7 @@ import {
     TableCell,
     styled,
   } from "@mui/material";
+  import Loading from "../shared/Loading";
   
   const StyledTableHead = styled(TableHead)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -18,10 +19,12 @@ import {
     data,
     headers,
     render,
+    loading,
   }: {
     data: any,
     headers: any,
     render: any
+    loading?: boolean,
   }) => {
   
     return (    
@@ -54,7 +57,10 @@ import {
   
   
                   <TableBody>
-                    {data.length > 0 && data.map((row: any, index: any) => render(row, index))}
+                    {loading ? 
+                      <Loading /> :
+                      data.length > 0 && data.map((row: any, index: any) => render(row, index))
+                    }
                   </TableBody>
                 </Table>
             </TableContainer>

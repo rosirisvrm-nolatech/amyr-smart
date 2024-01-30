@@ -48,14 +48,13 @@ const StatisticsPage = () => {
               <Grid container spacing={3}>
                 {metrics.length > 0 && metrics.map((item) => ( 
                   <React.Fragment key={item.title}>
-                    <Grid item md={4} xs={12}>
+                    <Grid item sm={4} xs={12}>
                       <MetricsIndicator metrics={item} />
                     </Grid>
                   </React.Fragment>
                 ))}    
               </Grid>
             </Grid>
-
 
             <Grid item xs={12}>
               <BarChart />

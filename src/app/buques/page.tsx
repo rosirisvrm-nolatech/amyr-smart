@@ -46,7 +46,7 @@ const data: Data[] = [
   {
     id: '1',
     name: 'Buque',
-    flag: "https://flagcdn.com/fr.svg",
+    flag: "https://flagcdn.com/br.svg",
     picture: 'https://www.legaltoday.com/wp-content/uploads/2021/03/BUQUE.jpg',
     imo: '000854723',
     type: 'Aenean commodo',
@@ -56,7 +56,7 @@ const data: Data[] = [
   {
     id: '2',
     name: 'Buque',
-    flag: 'https://flagcdn.com/dk.svg',
+    flag: 'https://flagcdn.com/ve.svg',
     picture: 'https://revistamaritima.files.wordpress.com/2016/01/embargos.png?w=863&h=444',
     imo: '000854723',
     type: 'Aenean commodo',
@@ -156,7 +156,7 @@ const ShipsPage = () => {
                       
                       <StyledTableCell align='center'>  
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar src={row.flag} sx={{ width: 42, height: 28, mr: 2  }} />
+                          <Avatar src={row.flag} sx={{ mr: 2 }} />
                           <Typography variant="body1" fontWeight={700}>
                             {row.name} #{index + 1}
                           </Typography>

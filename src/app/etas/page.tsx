@@ -1,17 +1,32 @@
 'use client'
-import React, { useState } from 'react';
-import { Button, Box, Typography, Stack, styled, Divider, Checkbox, IconButton, Popover, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { 
+  Button, 
+  Box, 
+  Typography, 
+  Stack, 
+  styled, 
+  Divider, 
+  Checkbox, 
+  IconButton, 
+  Popover, 
+  List, 
+  ListItem, 
+  ListItemButton, 
+  ListItemText,
+  TableCell, 
+  TableRow
+} from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+// import TabPanel from '@mui/lab/TabPanel';
 // import InputLabel from '@mui/material/InputLabel';
 // import MenuItem from '@mui/material/MenuItem';
 // import FormControl from '@mui/material/FormControl';
 // import Select from '@mui/material/Select';
 // import InputBase from '@mui/material/InputBase';
 // import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import { TableCell, TableRow } from "@mui/material";
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { IconList, IconChartLine } from '@tabler/icons-react';
 import PageContainer from '@/app/components/shared/PageContainer';
@@ -84,6 +99,7 @@ export interface Data {
   picture: any;
   destinationPort: string;
   etaReport: string;
+  status: string;
   checked: boolean;
 }
 
@@ -95,24 +111,27 @@ const data: Data[] = [
     picture: 'https://definicion.de/wp-content/uploads/2012/10/buque-1.jpg',
     destinationPort: 'Belen, Brazil',
     etaReport: '523U6532',
+    status: 'active',
     checked: false,
   },
   {
     id: '1',
     name: 'EVER GIVEN 1000',
-    flag: "https://flagcdn.com/fr.svg",
+    flag: "https://flagcdn.com/ve.svg",
     picture: 'https://www.legaltoday.com/wp-content/uploads/2021/03/BUQUE.jpg',
     destinationPort: 'Belen, Brazil',
     etaReport: '985G4754',
+    status: 'complete',
     checked: false,
   },
   {
     id: '2',
     name: 'APOLO 2000',
-    flag: 'https://flagcdn.com/dk.svg',
+    flag: 'https://flagcdn.com/br.svg',
     picture: 'https://revistamaritima.files.wordpress.com/2016/01/embargos.png?w=863&h=444',
     destinationPort: 'Belen, Brazil',
     etaReport: '77R643R',
+    status: 'active',
     checked: false,
   },
   {
@@ -122,6 +141,7 @@ const data: Data[] = [
     picture: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL-kenf_XtjmFDbd85Agaf49Nd_hoj5039cA&usqp=CAU',
     destinationPort: 'Belen, Brazil',
     etaReport: '6362E39U',
+    status: 'complete',
     checked: false,
   },
 ];
@@ -138,12 +158,13 @@ const headers = [
 
 const EtasPage = () => {
   const [value, setValue] = useState('1');
-  // const [select, setSelect] = React.useState('list');
   const [listMode, setListMode] = React.useState(true);
   const [etas, setEtas] = useState(data)
+  // const [loading, setLoading] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  // const [select, setSelect] = React.useState('list');
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -167,10 +188,6 @@ const EtasPage = () => {
     setValue(newValue);
   };
 
-  // const handleSelect = (event: { target: { value: string } }) => {
-  //   setSelect(event.target.value);
-  // };
-
   const handleChangeToList = () => {
     setListMode(true)
   }
@@ -179,10 +196,19 @@ const EtasPage = () => {
     setListMode(false)
   }
 
-  // combustible: disel marine toneladas metricas
-  // distancia: millas nauticas
-  // velocidad:
-  // consumo de combustible: 
+  // useEffect(() => {
+    
+  //   console.log('filterEtas :', filterEtas);
+  //   setEtas(filterEtas)
+
+  // }, [value])
+
+    // const handleSelect = (event: { target: { value: string } }) => {
+    //   setSelect(event.target.value);
+    // };
+
+  const filterEtas = value === '1' ? etas.filter(eta => eta.status === 'active') : etas.filter(eta => eta.status === 'complete')
+  console.log('filterEtas :', filterEtas);
 
   return (
     <PrivateRoute>
@@ -223,8 +249,8 @@ const EtasPage = () => {
                   <TabStyled label="Completados" value="2" />
                 </TabList>
               </Box>
-
-              <TabPanel value="1" sx={{ px: 0 }}>
+              
+              {/* <TabPanel value="1" sx={{ px: 0 }}> */}
 
                 {/* <Stack direction="row" alignItems="center" spacing={2}>
                   <InputLabel id="demo-customized-select-label" sx={{ fontWeight: 600 }}>Vista</InputLabel>
@@ -244,7 +270,7 @@ const EtasPage = () => {
                   </FormControl>
                 </Stack> */}
 
-                <Stack direction="row" alignItems="center" justifyContent='end' spacing={2}>  
+                <Stack direction="row" alignItems="center" justifyContent='end' spacing={2} sx={{ pt: 3 }}>  
                   <StyledButton 
                     variant="contained" 
                     disableElevation 
@@ -261,7 +287,7 @@ const EtasPage = () => {
                     <IconList />
                   </StyledButton>
 
-                  <StyledButton 
+                  {/* <StyledButton 
                     variant="contained" 
                     disableElevation 
                     color='secondary'
@@ -276,16 +302,16 @@ const EtasPage = () => {
                     onClick={handleChangeToChart}
                   >
                     <IconChartLine />
-                  </StyledButton>
+                  </StyledButton> */}
                 </Stack>
             
                 {listMode ? 
                   <TableComponent 
                     headers={headers} 
-                    data={etas}
+                    data={filterEtas}
+                    // loading={loading}
                     render={
                       (row: any, index: any) => {
-
                       return (
                         <TableRow key={row.id} sx={{ backgroundColor: row.checked ? '#f1f1f1' : 'transparent' }}>
 
@@ -335,11 +361,11 @@ const EtasPage = () => {
                   : 
                   <Box></Box>
                 }
-              </TabPanel>
+              {/* </TabPanel> */}
 
-              <TabPanel value="2">
+              {/* <TabPanel value="2">
                 
-              </TabPanel>
+              </TabPanel> */}
             </TabContext>
           </Box>
 

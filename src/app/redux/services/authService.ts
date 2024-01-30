@@ -8,7 +8,8 @@ const login = ({ username, password }: Auth) => {
         user:  {
             firstName: 'Jhon',
             lastName: 'Doe',
-            role: username === 'admin@gmail.com' ? 'admin' : 'supervisor',
+            role: 'admin',
+            // role: username === 'admin@gmail.com' ? 'admin' : 'supervisor',
         },
         token: 'lorem ipsum'
     };
