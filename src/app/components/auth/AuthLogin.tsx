@@ -10,11 +10,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
 import { FormProvider as Form, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { AuthTextField } from "./AuthTextField";
 import { login } from "@/app/redux/services/authService";
@@ -30,8 +28,6 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
   const userAuth = useAppSelector(state => state.auth.user)
   console.log('userAuth login:', userAuth);
-  
-  const router = useRouter()
 
   const dispatch = useAppDispatch()
 
@@ -53,9 +49,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
     defaultValues,
   });
 
-  const {
-    handleSubmit,
-  } = methods;
+  const { handleSubmit } = methods;
   
   const onSubmit = () => {
     setLoading(true)

@@ -19,12 +19,14 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
 
 type Props = {
     children: React.ReactNode;
-    onClick: any;
+    onClick?: any;
+    type?: any;
+    disabled?: boolean
 }
 
-function ActionButton({ children, onClick }: Props){
+function ActionButton({ children, onClick = null, type = 'button', disabled = false }: Props){
     return(
-        <ButtonStyled onClick={onClick}>
+        <ButtonStyled onClick={onClick} type={type} disabled={disabled}>
             {children}
         </ButtonStyled>
     );

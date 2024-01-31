@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller } from 'react-hook-form';
 import { Box, Typography } from "@mui/material";
-import CustomTextField from "../form/theme-elements/CustomTextField";
+import { TextField } from '@mui/material';
 
 type Props = {
   name: string,
@@ -28,7 +28,7 @@ const AuthTextField = ({ name, label, placeholder = '', sx, type = 'text', input
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => (
-          <CustomTextField
+          <TextField
             {...field}
             variant="outlined"
             fullWidth
