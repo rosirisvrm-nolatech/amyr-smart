@@ -4,17 +4,18 @@ import { env } from '../../config/env';
 type OilConsumptionParams = {
     distance?: number;
     speed?: number;
+    cost?: number;
 }
 
 type OilConsumptionResponse = {
-    consumo_aprox: number;
-    distancia_a_recorrer: number;
-    velocidad_promedio_nudos: number;
+    ['consumo_aprox TM']: number;
+    ['distancia_a_recorrer NM']: number;
+    ['costo$']: number;
 }
 
 type OilConsumptionDistanceResponse = {
     ['consumo_aprox TM']: number;
-    distancia_a_recorrer: number;
+    ['distancia_a_recorrer NM']: number;
 }
 
 type SumaryResponse = {
@@ -22,6 +23,13 @@ type SumaryResponse = {
     promedio_por_dia: number,
     distancia_recorrida: number,
     velocidad_promedio: number
+}
+
+type OilConsumptionOilCostResponse = {
+    consumo_aprox: number;
+    ['costo$']: number;
+    distancia_a_recorrer: number;
+    velocidad_promedio_nudos: number;
 }
 
 export const oilApi = createApi({
@@ -46,6 +54,10 @@ export const oilApi = createApi({
             query: () => 
                 `/brazil_to_venezuela`,
         }),
+        getOilConsumptionOilCost: builder.query<OilConsumptionOilCostResponse, OilConsumptionParams>({
+            query: ({ distance, speed, cost }) => 
+                `/oil_consumption/${distance}/${speed}/${cost}`,
+        }),
     })
 })
 
@@ -53,6 +65,6 @@ export const {
     useGetOilConsumptionQuery, 
     useGetOilConsumptionDistanceQuery, 
     useGetVenezuelaBrazilQuery,
-    useGetBrazilVenezuelaQuery
-    
+    useGetBrazilVenezuelaQuery,
+    useGetOilConsumptionOilCostQuery,
 } = oilApi
