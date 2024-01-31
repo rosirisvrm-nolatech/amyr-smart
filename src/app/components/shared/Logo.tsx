@@ -13,13 +13,18 @@ const LinkStyled = styled(Link)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-const Logo = () => {
+type Props = {
+  isLogin?: boolean
+}
+
+const Logo = ({ isLogin = false }: Props) => {
   return (
     <LinkStyled href="/">
       {/* <Typography variant="h3">
         Amyr Smart
       </Typography> */}
-      <Image src="/images/logos/logo.png" alt="logo" height={50} width={150} priority />
+      {!isLogin && <Image src="/images/logos/logo.png" alt="logo" height={50} width={150} priority />}
+      {isLogin && <Image src="/images/logos/logo2.png" alt="logo" height={50} width={150} priority />}
     </LinkStyled>
   );
 };

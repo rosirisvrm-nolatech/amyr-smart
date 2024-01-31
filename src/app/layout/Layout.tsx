@@ -42,7 +42,7 @@ export default function RootLayout({ children }: Props) {
 
   // -----------------------------------------------------------
 
-  if(pathname === '/login' || pathname === '/register'){
+  if(pathname === '/login' || pathname === '/recovery'){
     return children;
   }
 

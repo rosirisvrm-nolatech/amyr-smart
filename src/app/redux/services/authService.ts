@@ -17,7 +17,7 @@ const login = ({ username, password }: Auth) => {
 
 const register = (user: any) => {
 
-    console.log('register :', user);
+    console.log('recovery :', user);
     return user;
 }
 

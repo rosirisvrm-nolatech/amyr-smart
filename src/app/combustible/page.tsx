@@ -172,6 +172,7 @@ const OilPage = () => {
   const clearFields = () => {
     setDistance('')
     setVelocity('')
+    setCost('')
     setMetrics({
         ...metrics,
         number: 0,

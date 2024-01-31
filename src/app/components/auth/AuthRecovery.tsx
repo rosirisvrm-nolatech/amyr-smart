@@ -12,8 +12,8 @@ import { AuthTextField } from "./AuthTextField";
 
 interface registerType {
     title?: string;
-    subtitle?: JSX.Element | JSX.Element[];
-    subtext?: JSX.Element | JSX.Element[];
+    subtitle?: string;
+    subtext?: string;
   }
 
 const AuthRecovery = ({ title, subtitle, subtext }: registerType) => {
@@ -30,15 +30,15 @@ const AuthRecovery = ({ title, subtitle, subtext }: registerType) => {
   const [loading, setLoading] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    name: Yup.string().required('Se requiere un nombre'),
+    // name: Yup.string().required('Se requiere un nombre'),
     email: Yup.string().email('El correo electrónico debe ser una dirección de correo electrónico válida').required('El correo electronico es requerido'),
-    password: Yup.string().required('Se requiere una contraseña'),
+    // password: Yup.string().required('Se requiere una contraseña'),
   });
 
   const defaultValues = {
-    name: '',
+    // name: '',
     email: '',
-    password: '',
+    // password: '',
   };
 
   const methods = useForm({
@@ -72,20 +72,26 @@ const AuthRecovery = ({ title, subtitle, subtext }: registerType) => {
       <form onSubmit={handleSubmit(onSubmit)}>
 
         {title && (
-            <Typography fontWeight="700" variant="h2" mb={1}>
-                {title}
-            </Typography>
+          <Typography variant="subtitle1" mb={1} sx={{ textAlign: 'center', fontSize: 18 }}>
+              {title}
+          </Typography>
         )}
 
-        {subtext}
+        {subtext && (
+          <Box mx={8}>
+            <Typography variant="subtitle2" mb={1} sx={{ textAlign: 'center', fontSize: 14 }}>
+              {subtext}
+            </Typography>
+          </Box>
+        )}
 
         <Box>
             <Stack mb={3}>
-                <AuthTextField name='name' label="Name" />
+                {/* <AuthTextField name='name' label="Name" /> */}
 
-                <AuthTextField name='email' label="Email Address" sx={{ mt: "25px" }} />
+                <AuthTextField name='email' label="Email" sx={{ mt: "25px" }} />
                 
-                <AuthTextField name='password' label="Password" sx={{ mt: "25px" }} />
+                {/* <AuthTextField name='password' label="Password" sx={{ mt: "25px" }} /> */}
             </Stack>
             <Button color="secondary" variant="contained" size="large" fullWidth type='submit' sx={{
               color: 'text.secondary',

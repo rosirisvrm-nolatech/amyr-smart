@@ -46,8 +46,8 @@ const Login = () => {
               elevation={1}
               sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px", border: 'solid 2px #f1f1f1', boxShadow: 'none' }}
             >
-              <Box display="flex" alignItems="center" justifyContent="center" mb={4} p={1} sx={{ backgroundColor: 'primary.main' }}>
-                <Logo />
+              <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
+                <Logo isLogin />
               </Box>
               <AuthLogin
                 title="Ingresa tus datos"
@@ -60,7 +60,7 @@ const Login = () => {
                   >
                     <Typography
                       component={Link}
-                      href="/register"
+                      href="/recovery"
                       fontWeight="500"
                       sx={{
                         textDecoration: "none",
