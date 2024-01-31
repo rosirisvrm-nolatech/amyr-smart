@@ -115,7 +115,7 @@ function CustomInput({
             )}
         />
       }
-      {elementType === 'date' &&
+      {/* {elementType === 'date' &&
         <Controller
           name={name}
           control={control}
@@ -132,7 +132,7 @@ function CustomInput({
             />
           )}
         />
-      }
+      } */}
       {isError && 
           <FormHelperText>
               {isError.message}

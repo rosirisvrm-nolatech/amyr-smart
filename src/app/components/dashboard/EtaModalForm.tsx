@@ -142,7 +142,7 @@ function EtaModalForm({ openEtaForm, handleCloseEtaForm }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <CustomInput
                             id="startDate"
                             name="startDate"
@@ -153,7 +153,7 @@ function EtaModalForm({ openEtaForm, handleCloseEtaForm }: Props) {
                             isError={errors?.startDate}
                             elementType='date'
                         />
-                    </Grid>
+                    </Grid> */}
 
 
                     <Grid item xs={12}>
