@@ -15,15 +15,6 @@ const Login = () => {
           position: "relative",
           display: 'flex', 
           backgroundColor: '#fff',
-          "&:before": {
-            content: '""',
-            backgroundSize: "400% 400%",
-            animation: "gradient 15s ease infinite",
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-            opacity: "0.3",
-          },
         }}
       >
         <Grid

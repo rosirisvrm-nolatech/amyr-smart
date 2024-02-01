@@ -27,7 +27,7 @@ interface loginType {
 const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
   const userAuth = useAppSelector(state => state.auth.user)
-  console.log('userAuth login:', userAuth);
+  // console.log('userAuth login:', userAuth);
 
   const dispatch = useAppDispatch()
 
@@ -35,12 +35,12 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   const [loading, setLoading] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('El correo electrónico debe ser una dirección de correo electrónico válida').required('El correo electronico es requerido'),
+    username: Yup.string().required('Se requiere un usuario'),
     password: Yup.string().required('Se requiere una contraseña'),
   });
 
   const defaultValues = {
-    email: '',
+    username: '',
     password: '',
   };
 
@@ -55,8 +55,8 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
     setLoading(true)
 
     setTimeout(async () => {
-      console.log('methods.getValues() :', methods.getValues());
-      const { email: username, password } = methods.getValues()
+      // console.log('methods.getValues() :', methods.getValues());
+      const { username, password } = methods.getValues()
       
       const loginResponse = await login({ username, password })
   
@@ -69,22 +69,26 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
   return(
     <Form {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 
         {title && (
-          <Typography fontWeight="400" variant="subtitle1" mb={1} sx={{ textAlign: 'center' }}>
+          <Typography fontWeight="500" variant="subtitle1" mb={3} sx={{ textAlign: 'center', fontSize: 18 }}>
             {title}
           </Typography>
         )}
 
-        {subtext}
+        {subtext && 
+          <Typography variant="subtitle2" mb={1} sx={{ textAlign: 'center', fontSize: 14 }}>
+            {subtext}
+          </Typography>
+        }
 
         <Stack>
-          <AuthTextField name='email' label="Email" />
+          <AuthTextField name='username' placeholder="Usuario" />
 
           <AuthTextField 
             name='password' 
-            label="Contraseña" 
+            placeholder="Contraseña" 
             sx={{ my: "25px" }} 
             type={showPassword ? 'text' : 'password'}
             inputProps={{
@@ -99,7 +103,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
           />
         </Stack>
 
-        <Box>
+        <Box mt={3}>
           <Button
             color="secondary"
             variant="contained"

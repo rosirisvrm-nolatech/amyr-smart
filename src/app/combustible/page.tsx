@@ -10,14 +10,16 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import PageContainer from '@/app/components/shared/PageContainer';
 import { PrivateRoute } from "../components/shared/PrivateRoute";
-import { MetricsIndicator } from '../components/dashboard/MetricsIndicator';
+import { MetricsIndicator, MetricsIndicatorProps } from '../components/dashboard/MetricsIndicator';
 import { 
     useGetOilConsumptionQuery, 
     useGetOilConsumptionDistanceQuery, 
     useGetVenezuelaBrazilQuery, 
     useGetBrazilVenezuelaQuery,
-    useGetOilConsumptionOilCostQuery
+    useGetOilConsumptionOilCostQuery,
+    useGetOilConsumptionOilCostDistanceQuery
 } from '../redux/services/oilApi';
+import type { SumaryResponse } from '../redux/services/oilApi';
 
 const ActionButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
@@ -62,25 +64,30 @@ const TabStyled = styled(Tab)(({ theme }) => ({
     fontWeight: 500,
 }))
 
+type MetricsOilCost = { 
+    consumo_aprox: any; 
+    cost_aprox: any 
+}
+
 const OilPage = () => {
   const [distance, setDistance] = useState('');
   const [velocity, setVelocity] = useState('');
   const [cost, setCost] = useState('');
   const [calculate, setCalculate] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [metrics, setMetrics] = useState({
+  const [metrics, setMetrics] = useState<MetricsIndicatorProps>({
     icon: IconDropCircle,
     title: 'Consumo Aproximado',
     number: 0,
     unit: '',
   });
-  const [sumary, setSumary] = useState({
+  const [sumary, setSumary] = useState<SumaryResponse>({
     consumo_ultimo_viaje: 0,
     promedio_por_dia: 0,
     distancia_recorrida: 0,
     velocidad_promedio:0
   });
-  const [metricsCost, setMetricsCost] = useState({
+  const [metricsCost, setMetricsCost] = useState<MetricsOilCost>({
     consumo_aprox: 0,
     cost_aprox: 0,
   });
@@ -110,6 +117,17 @@ const OilPage = () => {
     cost: parseInt(cost),
   })
 
+  const { data: oilConsumptionOilCostDistance } = useGetOilConsumptionOilCostDistanceQuery({
+    distance: parseInt(distance),
+    cost: parseInt(cost),
+  })
+
+    //   Units
+    //   consumption: TM
+    //   distance: MN
+    //   speed: nudos
+    //   cost: $
+
   useEffect(() => {
     if(calculate){
         setLoading(false)
@@ -119,13 +137,13 @@ const OilPage = () => {
     if(calculate && tabs === '1'){
         setMetrics({
             ...metrics,
-            number: oilConsumption ? oilConsumption['consumo_aprox TM'] : 0,
+            number: oilConsumption ? oilConsumption['consumo_aprox TM'].toFixed(2) : 0,
             unit: 'TM',
         })
     }else if(calculate && tabs === '2'){
         setMetrics({
             ...metrics,
-            number: oilConsumptionDistance ? oilConsumptionDistance['consumo_aprox TM'] : 0,
+            number: oilConsumptionDistance ? oilConsumptionDistance['consumo_aprox TM'].toFixed(2) : 0,
             unit: 'TM',
         })
     }else if(calculate && tabs === '3'){
@@ -144,8 +162,13 @@ const OilPage = () => {
         })
     }else if(calculate && tabs === '5'){
         setMetricsCost({
-            consumo_aprox: oilConsumptionOilCost ? oilConsumptionOilCost?.consumo_aprox : 0,
-            cost_aprox: oilConsumptionOilCost ? oilConsumptionOilCost['costo$'] : 0,
+            consumo_aprox: oilConsumptionOilCost ? oilConsumptionOilCost?.consumo_aprox.toFixed(2) : 0,
+            cost_aprox: oilConsumptionOilCost ? oilConsumptionOilCost['costo$'].toFixed(2) : 0,
+        })
+    }else if(calculate && tabs === '6'){
+        setMetricsCost({
+            consumo_aprox: oilConsumptionOilCostDistance ? oilConsumptionOilCostDistance['consumo_aprox TM'].toFixed(2) : 0,
+            cost_aprox: oilConsumptionOilCostDistance ? oilConsumptionOilCostDistance['costo$'].toFixed(2) : 0,
         })
     }
   }, [calculate])
@@ -219,11 +242,12 @@ const OilPage = () => {
                             textColor="primary" 
                             indicatorColor="secondary"
                         >
-                            <TabStyled label="Distancia / Velocidad" value="1" />
-                            <TabStyled label="Distancia" value="2" />
-                            <TabStyled label="Venezuela a Brasil" value="3" />
-                            <TabStyled label="Brasil a Venezuela" value="4" />
-                            <TabStyled label="Costo de combustible" value="5" />
+                            <TabStyled label="Consumo Distancia/Velocidad" value="1" />
+                            <TabStyled label="Consumo Distancia" value="2" />
+                            <TabStyled label="Resumen Venezuela/Brasil" value="3" />
+                            <TabStyled label="Resumen Brasil/Venezuela" value="4" />
+                            <TabStyled label="Costo Distancia/Velocidad/Precio" value="5" />
+                            <TabStyled label="Costo Distancia/Precio" value="6" />
                         </TabList>
                     </Box>
 
@@ -231,7 +255,7 @@ const OilPage = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">
-                                    Consumo de combustible por <strong>Distancia y Velocidad</strong>
+                                    Consumo de combustible por Distancia y Velocidad
                                 </Typography>
                             </Grid>
                     
@@ -296,7 +320,7 @@ const OilPage = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">
-                                    Consumo de combustible por <strong>Distancia</strong>
+                                    Consumo de combustible por Distancia
                                 </Typography>
                             </Grid>
                     
@@ -350,7 +374,7 @@ const OilPage = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">
-                                    <strong>Venezuela a Brasil</strong>
+                                    Venezuela a Brasil
                                 </Typography>
                             </Grid>
                     
@@ -445,7 +469,7 @@ const OilPage = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">
-                                    <strong>Brasil a Venezuela</strong>
+                                    Brasil a Venezuela
                                 </Typography>
                             </Grid>
                     
@@ -542,13 +566,13 @@ const OilPage = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">
-                                    Costo de combustible según <strong>Precio de Combustible</strong>
+                                    Costo de combustible por Distancia, Velocidad y Precio
                                 </Typography>
                             </Grid>
                     
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1">
-                                    Calcula el costo de combustible por distancia a recorrer, velocidad del buque y precio del combustible
+                                    Calcula el costo del combustible por distancia a recorrer, velocidad del buque y precio del combustible
                                 </Typography>
                             </Grid>
 
@@ -602,7 +626,7 @@ const OilPage = () => {
                                         </Box> :
                                         <MetricsIndicator oilData metrics={metrics}>
                                             {(metricsCost?.consumo_aprox !== 0) && (
-                                                <Stack direction="row" spacing={2} alignItems='center'>
+                                                <Stack direction="row" spacing={1} alignItems='center'>
                                                     <Typography variant="subtitle1" fontWeight='700'>
                                                         Consumo Aproximado:
                                                     </Typography>
@@ -616,7 +640,7 @@ const OilPage = () => {
                                             )}
 
                                             {(metricsCost?.cost_aprox !== 0) && (
-                                                <Stack direction="row" spacing={2} alignItems='center'>
+                                                <Stack direction="row" spacing={1} alignItems='center'>
                                                     <Typography variant="subtitle1" fontWeight='700'>
                                                         Costo aproximado:
                                                     </Typography>
@@ -632,6 +656,99 @@ const OilPage = () => {
                                     }
 
                                     {(distance && velocity && cost) && 
+                                        <ActionButton onClick={clearFields} sx={{ mt: 6 }}>
+                                            Limpiar
+                                        </ActionButton>
+                                    }
+                                </Box>
+                            </Grid>
+                        </Grid>    
+                    </TabPanel>
+
+                    <TabPanel value="6" sx={{ px: 0, pt: 5 }}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Typography variant="h5">
+                                    Costo de combustible por Distancia y Precio
+                                </Typography>
+                            </Grid>
+                    
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1">
+                                    Calcula el costo del combustible por distancia a recorrer y precio del combustible
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12} md={4}>  
+                                <Stack direction="column" spacing={4}>
+                                    <Box>
+                                        <InputLabel id="distance-label" sx={{ fontSize: 14 }}>Distancia</InputLabel>
+                                        <BootstrapInput
+                                            id="distance"
+                                            name="distance"
+                                            type='text'
+                                            value={distance}
+                                            onChange={handleDistance}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <InputLabel id="velocity-label" sx={{ fontSize: 14 }}>Costo</InputLabel>
+                                        <BootstrapInput
+                                            id="cost"
+                                            name="cost"
+                                            type='text'
+                                            value={cost}
+                                            onChange={handleCost}
+                                        />
+                                    </Box>
+                                    <ActionButton 
+                                        onClick={calculateOilConsumption} 
+                                        disabled={!distance || !cost}
+                                    >
+                                        Calcular
+                                    </ActionButton>
+                                </Stack>
+                            </Grid>
+
+                            <Grid item xs={12} md={8}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                    
+                                    {loading ? 
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 100 }}>
+                                            <CircularProgress color='secondary' />
+                                        </Box> :
+                                        <MetricsIndicator oilData metrics={metrics}>
+                                            {(metricsCost?.consumo_aprox !== 0) && (
+                                                <Stack direction="row" spacing={1} alignItems='center'>
+                                                    <Typography variant="subtitle1" fontWeight='700'>
+                                                        Consumo Aproximado:
+                                                    </Typography>
+                                                    <Typography variant="subtitle1">
+                                                        {metricsCost?.consumo_aprox}
+                                                    </Typography>
+                                                    <Typography fontWeight='400' variant="caption">
+                                                        TM
+                                                    </Typography>
+                                                </Stack>
+                                            )}
+
+                                            {(metricsCost?.cost_aprox !== 0) && (
+                                                <Stack direction="row" spacing={1} alignItems='center'>
+                                                    <Typography variant="subtitle1" fontWeight='700'>
+                                                        Costo aproximado:
+                                                    </Typography>
+                                                    <Typography fontWeight='400' variant="caption">
+                                                        $
+                                                    </Typography>
+                                                    <Typography variant="subtitle1">
+                                                        {metricsCost?.cost_aprox}
+                                                    </Typography>
+                                                </Stack>
+                                            )}
+                                        </MetricsIndicator>
+                                    }
+
+                                    {(distance && cost) && 
                                         <ActionButton onClick={clearFields} sx={{ mt: 6 }}>
                                             Limpiar
                                         </ActionButton>

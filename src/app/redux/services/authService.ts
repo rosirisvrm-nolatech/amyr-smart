@@ -2,7 +2,7 @@ import { Auth } from '../../types';
 
 const login = ({ username, password }: Auth) => {  
 
-    console.log('login :', { username, password }); 
+    // console.log('login :', { username, password }); 
     
     return { 
         user:  {
@@ -17,7 +17,7 @@ const login = ({ username, password }: Auth) => {
 
 const register = (user: any) => {
 
-    console.log('recovery :', user);
+    // console.log('recovery :', user);
     return user;
 }
 

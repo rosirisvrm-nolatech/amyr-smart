@@ -21,7 +21,7 @@ const MetricTitleRow = styled(Box)(() => ({
 export type MetricsIndicatorProps = {
     icon: any,
     title: string,
-    number?: number,
+    number?: any,
     unit?: string,
 }
 

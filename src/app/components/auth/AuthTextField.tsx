@@ -5,25 +5,27 @@ import { TextField } from '@mui/material';
 
 type Props = {
   name: string,
-  label: string,
+  label?: string,
   placeholder?: string,
   sx?: object,
   type?: string,
   inputProps?: any,
 }
 
-const AuthTextField = ({ name, label, placeholder = '', sx, type = 'text', inputProps }: Props) => {
+const AuthTextField = ({ name, label = '', placeholder = '', sx, type = 'text', inputProps }: Props) => {
   return (
     <Box sx={sx}>
-      <Typography
-        variant="subtitle1"
-        fontWeight={600}
-        component="label"
-        htmlFor={name}
-        mb="5px"
-      >
-        {label}
-      </Typography>
+      {label && 
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          component="label"
+          htmlFor={name}
+          mb="5px"
+        >
+          {label}
+        </Typography>
+      }
     
       <Controller
         name={name}
@@ -38,6 +40,9 @@ const AuthTextField = ({ name, label, placeholder = '', sx, type = 'text', input
             placeholder={placeholder}
             type={type}
             InputProps={inputProps || null}
+            sx={{
+              borderRadius: '8px'
+            }}
           />
         )}
       />

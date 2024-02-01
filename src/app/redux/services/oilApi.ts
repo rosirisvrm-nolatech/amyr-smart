@@ -18,11 +18,11 @@ type OilConsumptionDistanceResponse = {
     ['distancia_a_recorrer NM']: number;
 }
 
-type SumaryResponse = {
-    consumo_ultimo_viaje: number,
-    promedio_por_dia: number,
-    distancia_recorrida: number,
-    velocidad_promedio: number
+export type SumaryResponse = {
+    consumo_ultimo_viaje: any;
+    promedio_por_dia: any;
+    distancia_recorrida: any;
+    velocidad_promedio: any;
 }
 
 type OilConsumptionOilCostResponse = {
@@ -30,6 +30,12 @@ type OilConsumptionOilCostResponse = {
     ['costo$']: number;
     distancia_a_recorrer: number;
     velocidad_promedio_nudos: number;
+}
+
+type OilConsumptionOilCostDistanceResponse = {
+    ['consumo_aprox TM']: number;
+    ['distancia_a_recorrer NM']: number;
+    ['costo$']: number;
 }
 
 export const oilApi = createApi({
@@ -58,6 +64,10 @@ export const oilApi = createApi({
             query: ({ distance, speed, cost }) => 
                 `/oil_consumption/${distance}/${speed}/${cost}`,
         }),
+        getOilConsumptionOilCostDistance: builder.query<OilConsumptionOilCostDistanceResponse, OilConsumptionParams>({
+            query: ({ distance, cost }) => 
+                `/oil_consumption/${distance}/${cost}`,
+        }),
     })
 })
 
@@ -67,4 +77,5 @@ export const {
     useGetVenezuelaBrazilQuery,
     useGetBrazilVenezuelaQuery,
     useGetOilConsumptionOilCostQuery,
+    useGetOilConsumptionOilCostDistanceQuery,
 } = oilApi
